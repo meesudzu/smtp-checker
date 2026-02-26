@@ -23,7 +23,7 @@ steps:
       - 'deploy'
       - 'smtp-checker'
       - '--image'
-      - 'asia-southeast1-docker.pkg.dev/$PROJECT_ID/my-repo/smtp-checker:$SHORT_SHA'
+      - 'asia-southeast1-docker.pkg.dev/$PROJECT_ID/smtp-repo/smtp-checker:$SHORT_SHA'
       - '--region'
       - 'asia-southeast1'
       - '--platform'
