@@ -1,13 +1,21 @@
 steps:
-  # Step 1: Build Docker Image
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'asia-southeast1-docker.pkg.dev/$PROJECT_ID/my-repo/smtp-checker:$SHORT_SHA', '.']
+  # Step 1: Build Image Google Cloud Buildpacks
+  - name: 'gcr.io/k8s-skaffold/pack'
+    args:
+      - 'build'
+      - 'asia-southeast1-docker.pkg.dev/$PROJECT_ID/my-repo/smtp-checker:$SHORT_SHA'
+      - '--builder'
+      - 'gcr.io/buildpacks/builder:v1'
+      - '--env'
+      - 'GOOGLE_FUNCTION_TARGET=smtpCheck'
+      - '--path'
+      - '.'
 
-  # Step 2: Push Image lên Registry
+  # Step 2: Push Image Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'asia-southeast1-docker.pkg.dev/$PROJECT_ID/my-repo/smtp-checker:$SHORT_SHA']
 
-  # Step 3: Deploy sang Cloud Run
+  # Step 3: Deploy Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
