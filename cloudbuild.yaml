@@ -3,7 +3,7 @@ steps:
   - name: 'gcr.io/k8s-skaffold/pack'
     args:
       - 'build'
-      - 'asia-southeast1-docker.pkg.dev/$PROJECT_ID/my-repo/smtp-checker:$SHORT_SHA'
+      - 'asia-southeast1-docker.pkg.dev/$PROJECT_ID/smtp/smtp-checker:$SHORT_SHA'
       - '--builder'
       - 'gcr.io/buildpacks/builder:v1'
       - '--env'
@@ -13,7 +13,7 @@ steps:
 
   # Step 2: Push Image Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'asia-southeast1-docker.pkg.dev/$PROJECT_ID/my-repo/smtp-checker:$SHORT_SHA']
+    args: ['push', 'asia-southeast1-docker.pkg.dev/$PROJECT_ID/smtp/smtp-checker:$SHORT_SHA']
 
   # Step 3: Deploy Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -23,7 +23,7 @@ steps:
       - 'deploy'
       - 'smtp-checker'
       - '--image'
-      - 'asia-southeast1-docker.pkg.dev/$PROJECT_ID/smtp-repo/smtp-checker:$SHORT_SHA'
+      - 'asia-southeast1-docker.pkg.dev/$PROJECT_ID/smtp/smtp-checker:$SHORT_SHA'
       - '--region'
       - 'asia-southeast1'
       - '--platform'
