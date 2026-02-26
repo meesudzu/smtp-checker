@@ -2,20 +2,15 @@
 use Google\CloudFunctions\FunctionsFramework;
 use Psr\Http\Message\ServerRequestInterface;
 
-FunctionsFramework::http('smtpCheck', 'smtpChecker');
+FunctionsFramework::http('smtpCheck', 'handler');
 
-/**
- * Main Handler cho Google Cloud Functions / Cloud Run
- */
-function smtpChecker(ServerRequestInterface $request): string
+function handler(ServerRequestInterface $request): string
 {
     $log = [];
     $success = false;
     $formData = [];
 
-    // Xử lý Request
     if ($request->getMethod() === 'POST') {
-        // Lấy dữ liệu form (application/x-www-form-urlencoded)
         $formData = (array)$request->getParsedBody();
         
         try {
@@ -43,7 +38,6 @@ function smtpChecker(ServerRequestInterface $request): string
                 $log[] = ">>> MODE: STANDARD SMTP";
             }
 
-            // Chạy test SMTP (truyền tham chiếu log và success)
             runSmtpTest($host, $port, $user, $final_pass, $security, $from_email, $to_email, $log, $success);
 
         } catch (Exception $e) {
@@ -80,7 +74,6 @@ function runSmtpTest($host, $port, $user, $pass, $security, $from, $to, &$log, &
         throw new Exception("Connection failed: $errstr ($errno)");
     }
 
-    // Helper closure để đọc response
     $readResponse = function($sock) {
         $response = "";
         while($str = fgets($sock, 515)) {
@@ -90,7 +83,6 @@ function runSmtpTest($host, $port, $user, $pass, $security, $from, $to, &$log, &
         return $response;
     };
 
-    // Helper closure để gửi lệnh
     $sendCommand = function($sock, $cmd) {
         fputs($sock, $cmd . "\r\n");
     };
@@ -178,7 +170,6 @@ function runSmtpTest($host, $port, $user, $pass, $security, $from, $to, &$log, &
     $success = true;
 }
 
-// Function để sinh HTML
 function renderHtml($post, $log, $success) {
     // Escape output helper
     $e = function($v) { return htmlspecialchars($v ?? ''); };
