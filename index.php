@@ -2,7 +2,7 @@
 use Google\CloudFunctions\FunctionsFramework;
 use Psr\Http\Message\ServerRequestInterface;
 
-FunctionsFramework::http('smtpTester', 'smtpChecker');
+FunctionsFramework::http('smtpCheck', 'smtpChecker');
 
 /**
  * Main Handler cho Google Cloud Functions / Cloud Run
