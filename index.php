@@ -1,19 +1,13 @@
 <?php
-require_once __DIR__ . '/vendor/autoload.php';
 
-use Google\CloudFunctions\FunctionsFramework;
-use Psr\Http\Message\ServerRequestInterface;
-
-FunctionsFramework::http('smtpCheck', 'handler');
-
-function handler(ServerRequestInterface $request): string
+function handler(): string
 {
     $log = [];
     $success = false;
     $formData = [];
 
-    if ($request->getMethod() === 'POST') {
-        $formData = (array)$request->getParsedBody();
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $formData = (array)$_POST;
         
         try {
             $host = $formData['host'] ?? '';
@@ -51,6 +45,9 @@ function handler(ServerRequestInterface $request): string
     // Render HTML Output
     return renderHtml($formData, $log, $success);
 }
+
+// Execute the handler and output
+echo handler();
 
 // --- HELPER FUNCTIONS ---
 

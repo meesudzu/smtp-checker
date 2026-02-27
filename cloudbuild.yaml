@@ -1,21 +1,17 @@
 steps:
-  # Step 1: Build Image Google Cloud Buildpacks
-  - name: 'gcr.io/k8s-skaffold/pack'
+  # Step 1: Build Image
+  - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'build'
+      - '-t'
       - 'asia-southeast1-docker.pkg.dev/$PROJECT_ID/smtp/smtp-checker:$SHORT_SHA'
-      - '--builder'
-      - 'gcr.io/buildpacks/builder:v1'
-      - '--env'
-      - 'GOOGLE_FUNCTION_TARGET=smtpCheck'
-      - '--path'
       - '.'
 
-  # Step 2: Push Image Artifact Registry
+  # Step 2: Push Image to Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'asia-southeast1-docker.pkg.dev/$PROJECT_ID/smtp/smtp-checker:$SHORT_SHA']
 
-  # Step 3: Deploy Cloud Run
+  # Step 3: Deploy to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
