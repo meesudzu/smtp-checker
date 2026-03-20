@@ -155,9 +155,9 @@ function runSmtpTest($host, $port, $user, $pass, $security, $from, $to, &$log, &
     $res = $readResponse($socket);
     if (substr($res, 0, 3) != '354') throw new Exception("DATA rejected: $res");
 
-    $subject = "DevOps Tool: Cloud Run SMTP Test";
+    $subject = "DevKit: SMTP Checker";
     $date = date(DATE_RFC2822);
-    $body = "Date: $date\r\nFrom: $realSender\r\nTo: $to\r\nSubject: $subject\r\n\r\nSMTP Test via Google Cloud Run (PHP).\r\nHost: $host\r\n.\r\n";
+    $body = "Date: $date\r\nFrom: $realSender\r\nTo: $to\r\nSubject: $subject\r\n\r\nSMTP Test via DevKit.\r\nHost: $host\r\n.\r\n";
 
     $sendCommand($socket, $body);
     $res = $readResponse($socket);
